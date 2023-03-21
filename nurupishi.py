@@ -18,7 +18,7 @@ app = Flask(__name__, template_folder="templates")
 
 load_dotenv('cook.env')
 
-#creates a login manager
+"""creates a login manager"""
 login_manager = LoginManager()
 login_manager.init_app(app)
 
