@@ -56,22 +56,23 @@ def search():
 
 @app.route("/signup", methods=["POST"])
 def signup():
-    pass
-#    session = Session()
-   # user = User(username=request.form['username'], email=request.form['email'], password=request.form['password'], creation_date=datetime.now())
-  #  session.add(user)
- #   session.commit()
-#    session.close()
+    session = Session()
+    user = User(username=request.form['username'], email=request.form['email'], password=request.form['password'], creation_date=datetime.now())
+    session.add(user)
+    session.commit()
+    session.close()
 
+    return render_template('signup.html')
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         session = Session()
         user = session.query(User).filter_by(username=request.form['username'], password=request.form['password']).first()
-        if user:
+        if user and bcrypt.checkpw(request.form['password'].encode('utf-8'), user.password):
             session.close()
-            return redirect('/home')
+            session['username'] = user.username
+            return redirect('/')
         else:
             session.close()
             flash('Invalid username or password')
