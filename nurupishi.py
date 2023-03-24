@@ -8,14 +8,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user, login_required
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import *
+#from models import *
 from dotenv import load_dotenv
 import requests
 import os
 
 
 app = Flask(__name__, template_folder="templates")
-
 load_dotenv('cook.env')
 
 """creates a login manager"""
@@ -24,8 +23,13 @@ login_manager.init_app(app)
 
 app_id = os.getenv("APP_ID")
 app_key = os.getenv("APP_KEY")
+database_uri = os.getenv("DATABASE_URI")
+app.config['SQLALCHEMY_DATABASE_URI'] = f'{database_uri}'
+
+db = SQLAlchemy(app)
 
 
+@login_manager.user_loader
 def load_user(user_id):
     """returns a User object from user_id"""
     return User.query.get(int(user_id))
