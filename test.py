@@ -9,8 +9,8 @@ import requests
 app = Flask(__name__, template_folder="templates")
 
 # API credentials
-app_id = '92cbf0b8'
-app_key = '879e5e7939a60c5d95fcc171afba4e89'
+app_id = 
+app_key = 
 
 # Get random recipes from the API
 @app.route("/")
