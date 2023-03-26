@@ -17,6 +17,7 @@
 					{% if current_user.is_authenticated %}
 					<li><a href="{{ url_for('favorites') }}">Favorite</a></li>
 					<li><a href="{{ url_for('bookmarks') }}">Bookmark</a></li>
+					<li><a href="{{ url_for('signup') }}">SignUp</a></li>
 					{% endif %}
 				</div>
 			</ul>

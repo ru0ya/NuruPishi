@@ -8,7 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user, login_required
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-#from models import *
+from flask_session import Session
+from models import *
 from dotenv import load_dotenv
 import requests
 import os
@@ -23,7 +24,7 @@ login_manager.init_app(app)
 
 app_id = os.getenv("APP_ID")
 app_key = os.getenv("APP_KEY")
-database_uri = os.getenv("DATABASE_URI")
+database_uri = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_DATABASE_URI'] = f'{database_uri}'
 
 db = SQLAlchemy(app)
@@ -48,17 +49,28 @@ def search():
     """
     query = request.args.get('query')
     url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
+#    url = f'https://api.spoonacular.com/recipes/findByIngredients'
+#    params = {
+ #       'apiKey': app_key,
+  #      'ingredients': query,
+   #     'number': 9
+#    }
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()['hits']
+    #data = response.json()
     recipes = []
+#   for item in data["results"]:
+        #recipe = item['recipe']
+#    recipes.append(recipe)
+#    print(data)
     for item in data:
         recipe = item['recipe']
         recipes.append(recipe)
 
     return render_template('search.html', recipes=recipes)
 
-@app.route("/signup", methods=["POST"])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
     session = Session()
     user = User(username=request.form['username'], email=request.form['email'], password=request.form['password'], creation_date=datetime.now())
