@@ -12,18 +12,26 @@
 			<div class="logo">NP</div>
 			<ul class="nav-links">
 				<div class="menu">
-					<li><a href="{{ url_for('index') }}">Home</a></li>
-					<li><a href="{{ url_for('search') }}">Search</a></li>
+					<li><a href="{{ url_for('index') }}">Search</a></li>
+					<li><a href="{{ url_for('search') }}">Home</a></li>
+					<li><a href="{{ url_for('signup') }}">SignUp</a></li>
+					<li><a href="{{ url_for('login') }}">LogIn</a></li>
 					{% if current_user.is_authenticated %}
 					<li><a href="{{ url_for('favorites') }}">Favorite</a></li>
 					<li><a href="{{ url_for('bookmarks') }}">Bookmark</a></li>
-					<li><a href="{{ url_for('signup') }}">SignUp</a></li>
 					{% endif %}
 				</div>
 			</ul>
 		</nav>
 		<main>
-			{% block content %}{% endblock %}
+			{% block content %}
+			<div class="search-container">
+				<form action="{{ url_for('search') }}" method="get">
+					<input type="search" name="query" placeholder="Japanese Pancakes">
+					<button type="submit">Search</button>
+				</form>
+			</div><br>
+			{% endblock %}
 		</main>
 	</body>
 </html>

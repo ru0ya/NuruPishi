@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
+<div class="search-container">
+	<form action="{{ url_for('search') }}" method="get">
+		<input type="search" name="query" placeholder="Japanese Pancakes">
+		<button type="submit">Search</button>
+	</form>
+</div><br>
+
 <div class="recipe-container">
 	{% for recipe in recipes %}
 	<div class="recipe">

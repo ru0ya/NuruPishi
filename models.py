@@ -6,6 +6,7 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from datetime import datetime
 import os
@@ -25,9 +26,11 @@ class Favorites(Base):
     """
     __tablename__ = 'favorites'
     favorites_id = Column(Integer, primary_key=True)
-    recipe_type = Column(String)
-    recipe_id = Column(Integer, ForeignKey('recipes.id'), nullable=False)
-    users_id = Column(Integer, ForeignKey('user_id.id'), nullable=False)
+    recipe_type = Column(String(255), nullable=False)
+    recipe_id = Column(Integer, ForeignKey('recipes.recipes_id'), nullable=False)
+    users_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
+
+#    users = relationship('User', backref='favorite_recipe', lazy='dynamic')
 
 class Bookmarks(Base):
     """
@@ -35,10 +38,12 @@ class Bookmarks(Base):
     """
     __tablename__ = 'bookmarks'
     bookmarks_id = Column(Integer, primary_key=True)
-    users_id = Column(Integer, ForeignKey('user_id.id'), nullable=False)
+    users_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     name = Column(String(255), nullable=False)
     url = Column(String(255), nullable=False)
     description = Column(String(255))
+
+ #   users = relationship('User', backref='bookmarks', lazy='dynamic')
 
 class User(Base):
     """
@@ -52,25 +57,27 @@ class User(Base):
     password = Column(String(255), nullable=False)
     creation_date = Column(Date, nullable=False)
     
-    favorites = relationship('Favorites', backref='user', lazy=True)
-    bookmarks = relationship('Bookmarks', backref='user', lazy=True)
+    favorite_recipes = relationship('Favorites', backref='user', lazy='dynamic')
+    bookmarks = relationship('Bookmarks', backref='user', lazy='dynamic')
+    search_history = relationship('SearchHistory', backref='user', lazy='dynamic')
 
 
 class SearchHistory(Base):
     """saves users search history"""
     __tablename__ = 'search_history'
     history_id = Column(Integer, primary_key=True)
-    users_id = Column(Integer, ForeignKey('user_id.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     query = Column(String(255), nullable=False)
     timestamp = Column(DateTime, nullable=False, default=datetime.now)
-    user = relationship('User', backref='search_history')
+#    users = relationship('User', backref='search_history', lazy='dynamic')
 
 class Recipe(Base):
     """saves frequently asked recipes """
     __tablename__ = 'recipes'
     recipes_id = Column(Integer, primary_key=True)
     title = Column(String(100), nullable=False)
+    ingredients = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
-    instructions = Column(String, nullable=False)
-    image_url = Column(String, nullable=False)
+    instructions = Column(String(1000), nullable=False)
+    image_url = Column(String(255), nullable=False)
 
