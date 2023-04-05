@@ -1,11 +1,9 @@
 #!/usr/bin/python3
-"""
-Flask Web App:NuruPishi 
-"""
+"""routes and templates"""
 
 from flask import Flask, flash, render_template, request, url_for, redirect, Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import( 
+from flask_login import(
     LoginManager,
     current_user,
     login_required,
@@ -13,102 +11,38 @@ from flask_login import(
     login_user,
     logout_user
 )
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+#from sqlalchemy import create_engine
+#from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
-from flask_session import Session
-from flask_bcrypt import Bcrypt
-#from models import User, Bookmarks, Favorites
-import models
-from flask_migrate import Migrate
-from dotenv import load_dotenv
+#from flask_session import Session
+#from flask_bcrypt import Bcrypt
+#from models import User
+#from dotenv import load_dotenv
 from datetime import timedelta
-#from config import Config
-from forms import register_form, login_form
-#from app_plugins import init_app, db, login_manager
+#from app_plugins import db, login_manager
+from app_plugins import init_app, db, login_manager
+#from forms import register_form, login_form
+#from nurupishi import create_app
 #from models import Session
-#from database import db
-from forms import register_form, login_form
+from dotenv import load_dotenv
 import requests
 import os
 
-
-#from app_plugins import init_app
-
+#app = create_app()
+#db.init_app(app)
 load_dotenv('cook.env')
 
-db = SQLAlchemy()
-migrate = Migrate()
-bcrypt = Bcrypt()
-
-
-login_manager = LoginManager()
-login_manager.session_protection = "strong"
-login_manager.login_view = "login"
-login_manager.login_message_category = "info"
-
-
-#def create_app():
-app = Flask(__name__, template_folder="templates")
-#app.config.from_object(Config)
-#init_app(app)
-
-app.secret_key = os.getenv("MY_SECRET_KEY") 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=2)
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SESSION_TYPE = 'filesystem'
+views_bp = Blueprint('views', __name__)
 
 app_id = os.getenv("APP_ID")
 app_key = os.getenv("APP_KEY")
-database_uri = os.getenv("DATABASE_URL")
-#print(database_uri)
-#print(os.getenv("DATABASE_URL"))
-app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 
-#    from app_plugins import init_app, db
-    #login_manager.init_app(app)
-    #db.init_app(app)
-#    migrate.init_app(app, db)
- #   bcrypt.init_app(app)
-
-
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-#db.init_app(app)
-
-
-database_url = os.getenv("DATABASE_URL")
-engine = create_engine(database_url)
-
-#(app.config['SQLALCHEMY_DATABASE_URI'])
-#    with app.app_context():
- #       from views import views_bp
-  
-  #app.register_blueprint(views_bp)
-
-#engine = db.engine
-Session = sessionmaker(bind=engine)
-
-   # import models
-    #import views
-
-#    return app
-
-#app = create_app()
-#session = Session()
-
-#Base.metadata.create_all(engine)
-
-#from models import User, Bookmarks, Favorites
 
 @login_manager.user_loader
 def load_user(user_id):
     """returns a User object from user_id"""
     return User.query.get(int(user_id))
 
-@app.context_processor
-def inject_current_user():
-    return dict(current_user=current_user)
 
 @app.route("/")
 def index():
@@ -121,30 +55,32 @@ def search():
     """
     query = request.args.get('query')
     url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
-#    url = f'https://api.spoonacular.com/recipes/findByIngredients'
-    # params = {
- #       'apiKey': app_key,
-  #      'ingredients': query,
-   #     'number': 9
-#    }
+    #    url = f'https://api.spoonacular.com/recipes/findByIngredients'
+    #    params = {
+    #       'apiKey': app_key,
+    #      'ingredients': query,
+    #     'number': 9
+    #    }
     
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()['hits']
     #data = response.json()
     recipes = []
+    #   for item in data["results"]:
+        #recipe = item['recipe']
+        #    recipes.append(recipe)
+        #    print(data)
+
     for item in data:
         recipe = item['recipe']
         recipes.append(recipe)
-#    print(data)
-   # for item in data:
-    #    recipe = item['recipe']
-     #   recipes.append(recipe)
 
     return render_template('search.html', recipes=recipes)
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    from models import User
     """
     allows a new user to create an account
     using email, username and a password
@@ -167,13 +103,15 @@ def signup():
             db.session.add(newuser)
             db.session.commit()
             flash(f"Account Succesfully created", "success")
-            returnredirect(url_for("login"))
+            return redirect(url_for("login"))
         except Exception as e:
             flash(e, "danger")
+     
     return render_template('auth.html', form=form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    from models import User
     form = login_form()
 
     if form.validate_on_submit():
@@ -187,7 +125,7 @@ def login():
                 flash("Invalid Username or password!", "danger")
         except Exception as e:
             flash(e, "danger")
-    
+
     return render_template('auth.html', form=form)
 
 @app.route("/logout")
@@ -206,19 +144,25 @@ def userprofile():
 
 @app.route("/bookmark", methods=["GET"])
 def bookmarks():
+    from models import User
     with Session() as session:
         user = session.query(User).filter_by(username=session('username')).first()
         bookmarks = session.query(Bookmarks).filter_by(users_id=user.user_id).all()
-        session.close()
+        #session.close()
+
         return render_template('bookmark.html', bookmarks=bookmarks)
 
 @app.route("/favorites", methods=["GET"])
 def favorites():
+    from models import User
     with Session() as session:
         user = session.query(User).filter_by(username=session('username')).first()
         favorites = session.query(Favorites).filter_by(users_id=user.user_id).all()
-        session.close()
+        #    session.close()
         return render_templates('favorites.html', favorites=favorites)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+
+#if __name__ == "__main__":
+ #   app.run(debug=True)
+

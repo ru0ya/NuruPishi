@@ -1,9 +1,11 @@
 body{
+
 	padding: 0;
 	width: 100%;
-	height: 100%;
 	margin: 0;
 	font-family: 'Open Sans' sans-serif;
+	background-size: cover;
+	height: calc(100vh - 80px);
 }
 .search-container {
   display: flex;
@@ -74,6 +76,9 @@ button[type="submit"]:hover {
 	color: #fff;
 	flex-wrap: wrap;
 	width: 100%;
+	height: 100px;
+/*	height: calc(100vh - 80px);
+	background-size: cover;*/
 }
 
 .logo {
@@ -93,24 +98,40 @@ button[type="submit"]:hover {
 }
 
 .menu li:hover {
-	box-shadow: inset 100px 0 0 0 #FFDAB9;
+	box-shadow: inset 100px 0 0 0 #FFBF00;
 	color: #3e8e41;
 	border-radius: 5px;
 	transition: 0.3s ease;
-	background-color: #FFFFF0;
+	background-color: #FFDAB9;
 }
 
 .menu li {
 	padding: 5px 14px;
 }
 
-.main-nav a {
-	color: #3e8e41;
+.menu a {
+	color: #FFFFF0;
 	text-decoration: none;
 	border-bottom: none;
 }
 
+.nav-links {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.nav-links li {
+	display: inline-block;
+	margin: 0 10px;
+}
+
 .user-info {
+	align-items: center;
+	background-image: url('cook.jpg');
+     	background-size: cover;
+       	background-repeat: no-repeat;
+	background-position: center center;
 	justify-content: center;
 	position: relative;
 	border-radius: 8px;
@@ -118,5 +139,6 @@ button[type="submit"]:hover {
 	margin: 0 auto;
 	border: none;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
 }
 

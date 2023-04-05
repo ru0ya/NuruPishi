@@ -13,6 +13,7 @@
 	{% for recipe in recipes %}
 	<div class="modal-header">
 		<img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+		<h5>{{ recipe.label }}</h5>
 		<ul>
 			{% for ingredient in recipe.ingredients %}
 			<li>{{ ingredient.text }}</li>
