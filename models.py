@@ -12,17 +12,17 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from datetime import datetime
-from nurupishi import db
+#from nurupishi import db
 #from app_plugins import db
 import os
 
 
 #app = create_app()
 
-load_dotenv('cook.env')
+#load_dotenv('cook.env')
 #Base = declarative_base()
 
-#db = SQLAlchemy()
+db = SQLAlchemy()
 
 #database_url = os.getenv("DATABASE_URL")
 #connection_string = f"mysql://{database_url}"
@@ -102,9 +102,6 @@ class Recipe(UserMixin, db.Model):
     instructions = db.Column(db.String(1000), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
 
-from nurupishi import app
-with app.app_context():
-    db.create_all()
-
-#engine = db.engine
-#Session = sessionmaker(bind=engine)
+#from nurupishi import app
+#with app.app_context():
+#    db.create_all()

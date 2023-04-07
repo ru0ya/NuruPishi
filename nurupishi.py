@@ -37,7 +37,7 @@ import os
 
 load_dotenv('cook.env')
 
-db = SQLAlchemy()
+#db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
 
@@ -72,9 +72,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
  #   bcrypt.init_app(app)
 
 
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-#db.init_app(app)
+db.init_app(app)
 
 
 database_url = os.getenv("DATABASE_URL")

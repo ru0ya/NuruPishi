@@ -18,9 +18,9 @@ from sqlalchemy.exc import IntegrityError
 #from flask_bcrypt import Bcrypt
 #from models import User
 #from dotenv import load_dotenv
-from datetime import timedelta
+#from datetime import timedelta
 #from app_plugins import db, login_manager
-from app_plugins import init_app, db, login_manager
+#from app_plugins import init_app, db, login_manager
 #from forms import register_form, login_form
 #from nurupishi import create_app
 #from models import Session
@@ -32,10 +32,10 @@ import os
 #db.init_app(app)
 load_dotenv('cook.env')
 
-views_bp = Blueprint('views', __name__)
+views_bp = Blueprint('views_bp', __name__)
 
-app_id = os.getenv("APP_ID")
-app_key = os.getenv("APP_KEY")
+#app_id = os.getenv("APP_ID")
+#app_key = os.getenv("APP_KEY")
 
 
 @login_manager.user_loader
@@ -44,11 +44,11 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route("/")
+@views_bp.route("/")
 def index():
     return render_template("base.html")
 
-@app.route("/search", methods=["GET"])
+@views_bp.route("/search", methods=["GET"])
 def search():
     """
     fetches users search query returns recipe
@@ -78,7 +78,7 @@ def search():
 
     return render_template('search.html', recipes=recipes)
 
-@app.route("/signup", methods=["GET", "POST"])
+@views_bp.route("/signup", methods=["GET", "POST"])
 def signup():
     from models import User
     """
@@ -109,7 +109,7 @@ def signup():
      
     return render_template('auth.html', form=form)
 
-@app.route("/login", methods=["GET", "POST"])
+@views_bp.route("/login", methods=["GET", "POST"])
 def login():
     from models import User
     form = login_form()
@@ -128,13 +128,13 @@ def login():
 
     return render_template('auth.html', form=form)
 
-@app.route("/logout")
+@views_bp.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route("/myprofile")
+@views_bp.route("/myprofile")
 @login_required
 def userprofile():
     favorites = current_user.favorites.all()
@@ -142,7 +142,7 @@ def userprofile():
 
     return render_template("myprofile.html", favorites=favorites, bookmarks=bookmarks)
 
-@app.route("/bookmark", methods=["GET"])
+@views_bp.route("/bookmark", methods=["GET"])
 def bookmarks():
     from models import User
     with Session() as session:
@@ -152,7 +152,7 @@ def bookmarks():
 
         return render_template('bookmark.html', bookmarks=bookmarks)
 
-@app.route("/favorites", methods=["GET"])
+@views_bp.route("/favorites", methods=["GET"])
 def favorites():
     from models import User
     with Session() as session:
@@ -160,9 +160,3 @@ def favorites():
         favorites = session.query(Favorites).filter_by(users_id=user.user_id).all()
         #    session.close()
         return render_templates('favorites.html', favorites=favorites)
-
-
-
-#if __name__ == "__main__":
- #   app.run(debug=True)
-
