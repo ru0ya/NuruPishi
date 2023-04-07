@@ -30,6 +30,10 @@ import os
 
 #app = create_app()
 #db.init_app(app)
+
+from app_plugins import login_manager
+
+
 load_dotenv('cook.env')
 
 views_bp = Blueprint('views_bp', __name__)
