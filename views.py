@@ -38,8 +38,8 @@ load_dotenv('cook.env')
 
 views_bp = Blueprint('views_bp', __name__)
 
-app_id = os.getenv("APP_ID")
-app_key = os.getenv("APP_KEY")
+#app_id = os.getenv("APP_ID")
+#app_key = os.getenv("APP_KEY")
 
 
 @login_manager.user_loader

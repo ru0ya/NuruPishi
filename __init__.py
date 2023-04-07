@@ -21,13 +21,16 @@ load_dotenv('cook.env')
 #login_manager = LoginManager()
 #migrate = Migrate()
 
+app_id = os.getenv("APP_ID")
+app_key = os.getenv("APP_KEY")
+
 
 login_manager.session_protection = "strong"
 login_manager.login_view = "login"
 login_manager.login_message_category = "info"
 
 
-def create_app():
+def create_app(app_id, app_key):
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.secret_key = os.getenv('MY_SECRET_KEY')
     app_id = os.getenv('APP_ID')
@@ -56,5 +59,5 @@ def create_app():
     return app
 
 if __name__ == "__main__":
-    app = create_app()
+    app = create_app(app_id, app_key)
     app.run()
