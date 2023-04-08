@@ -68,8 +68,6 @@ class Favorites(UserMixin, db.Model):
     recipe_id = db.Column(db.Integer, ForeignKey('recipes.recipes_id'), nullable=False)
     users_id = db.Column(db.Integer, ForeignKey('users.user_id'), nullable=False)
 
-#    users = relationship('User', backref='favorite_recipe', lazy='dynamic')
-
 class Bookmarks(UserMixin, db.Model):
     """
     saves users bookmarked recipes for future reference
@@ -81,8 +79,6 @@ class Bookmarks(UserMixin, db.Model):
     url = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255))
 
- #   users = relationship('User', backref='bookmarks', lazy='dynamic')
-
 class SearchHistory(UserMixin, db.Model):
     """saves users search history"""
     __tablename__ = 'search_history'
@@ -90,7 +86,6 @@ class SearchHistory(UserMixin, db.Model):
     user_id = db.Column(db.Integer, ForeignKey('users.user_id'), nullable=False)
     query = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
-#    users = relationship('User', backref='search_history', lazy='dynamic')
 
 class Recipe(UserMixin, db.Model):
     """saves frequently asked recipes """
@@ -101,7 +96,3 @@ class Recipe(UserMixin, db.Model):
     description = db.Column(db.Text, nullable=False)
     instructions = db.Column(db.String(1000), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
-
-#from nurupishi import app
-#with app.app_context():
-#    db.create_all()
