@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """routes and templates"""
 
-from flask import Flask, flash, render_template, request, url_for, redirect, Blueprint
+from flask import Flask, flash, render_template, request, url_for, redirect, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import(
     LoginManager,
@@ -21,7 +21,7 @@ from sqlalchemy.exc import IntegrityError
 #from datetime import timedelta
 #from app_plugins import db, login_manager
 #from app_plugins import init_app, db, login_manager
-#from forms import register_form, login_form
+from forms import register_form, login_form
 #from nurupishi import create_app
 #from models import Session
 from dotenv import load_dotenv
@@ -36,7 +36,7 @@ from app_plugins import login_manager
 
 load_dotenv('cook.env')
 
-views_bp = Blueprint('views_bp', __name__)
+views_bp = Blueprint('views_bp', __name__, template_folder='templates')
 
 #app_id = os.getenv("APP_ID")
 #app_key = os.getenv("APP_KEY")
@@ -58,6 +58,8 @@ def search():
     fetches users search query returns recipe
     """
     query = request.args.get('query')
+    app_id = current_app.config['APP_ID']
+    app_key = current_app.config['APP_KEY']
     url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
     #    url = f'https://api.spoonacular.com/recipes/findByIngredients'
     #    params = {

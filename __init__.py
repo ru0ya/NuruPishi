@@ -33,12 +33,16 @@ login_manager.login_message_category = "info"
 def create_app(app_id, app_key):
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.secret_key = os.getenv('MY_SECRET_KEY')
-    app_id = os.getenv('APP_ID')
-    app_key = os.getenv('APP_KEY')
+    app.config['APP_ID'] = os.getenv('APP_ID')
+    app.config['APP_KEY'] = os.getenv('APP_KEY')
+ #   app_id = os.getenv('APP_ID')
+#    app_key = os.getenv('APP_KEY')
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SESSION_TYPE'] = 'filesystem'
+
+
 
     db.init_app(app)
 
@@ -59,5 +63,5 @@ def create_app(app_id, app_key):
     return app
 
 if __name__ == "__main__":
-    app = create_app(app_id, app_key)
+    app = create_app(app_id="APP_ID", app_key="APP_KEY")
     app.run()
