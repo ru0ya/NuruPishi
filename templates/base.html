@@ -23,13 +23,13 @@ mysql://mpishi:nurupishi@3.90.65.37:3306/NuruPishi
 			<div class="logo">NP</div>
 			<ul class="nav-links">
 				<div class="menu">
-					<li><a href="{{ url_for('index') }}">Search</a></li>
-					<li><a href="{{ url_for('search') }}">Home</a></li>
-					<li><a href="{{ url_for('signup') }}">SignUp</a></li>
-					<li><a href="{{ url_for('login') }}">LogIn</a></li>
+					<li><a href="{{ url_for('views_bp.index') }}">Search</a></li>
+					<li><a href="{{ url_for('views_bp.search') }}">Home</a></li>
+					<li><a href="{{ url_for('views_bp.signup') }}">SignUp</a></li>
+					<li><a href="{{ url_for('views_bp.login') }}">LogIn</a></li>
 					{% if current_user.is_authenticated %}
-					<li><a href="{{ url_for('favorites') }}">Favorite</a></li>
-					<li><a href="{{ url_for('bookmarks') }}">Bookmark</a></li>
+					<li><a href="{{ url_for('views_bp.favorites') }}">Favorite</a></li>
+					<li><a href="{{ url_for('views_bp.bookmarks') }}">Bookmark</a></li>
 					{% endif %}
 				</div>
 			</ul>
@@ -37,7 +37,7 @@ mysql://mpishi:nurupishi@3.90.65.37:3306/NuruPishi
 		<main>
 			{% block content %}
 			<div class="search-container">
-				<form action="{{ url_for('search') }}" method="get">
+				<form action="{{ url_for('views_bp.search') }}" method="get">
 					<input type="search" name="query" placeholder="Japanese Pancakes">
 					<button type="submit">Search</button>
 				</form>
