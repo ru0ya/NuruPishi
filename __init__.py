@@ -40,6 +40,8 @@ def create_app(app_id, app_key):
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SESSION_TYPE'] = 'filesystem'
 
+    db.init_app(app)
+
 
     bcrypt.init_app(app)
     login_manager.init_app(app)
@@ -47,8 +49,6 @@ def create_app(app_id, app_key):
 
     from views import views_bp as views_bp
     app.register_blueprint(views_bp)
-
-    db.init_app(app)
 
     with app.app_context():
         db.create_all()
