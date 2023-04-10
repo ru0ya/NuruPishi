@@ -6,7 +6,7 @@
 	{{ form.csrf_token }}
 
 	{% with messages = get_flashed_messages(with_categories=true) %}
-	{% if mesages %}
+	{% if messages %}
 	{% for category, message in messages %}
 	<div class="alert alert-{{category}} alert-dismissable fade show" role="alert">
 	{{ message }}
@@ -17,6 +17,7 @@
 	{% endwith %}
 
 	{% if request.path == '/signup' %}
+
 	{{ form.username(class_="form-control", placeholder="Username")}}
 
 	{% for error in form.username.errors %}
@@ -47,7 +48,7 @@
 	{% endif %}
 
 	<button type="submit" class="btn btn-block btn-primary mb-3">
-	{{ btn_action }}
+		{{ btn_action }}
 	</button>
 
 	<p>

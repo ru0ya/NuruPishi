@@ -13,6 +13,8 @@ from wtforms.validators import (
     Optional
 )
 
+from models import User
+
 class register_form(FlaskForm):
     username = StringField(
         validators=[

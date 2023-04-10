@@ -33,7 +33,6 @@ import os
 
 from app_plugins import login_manager
 
-
 load_dotenv('cook.env')
 
 views_bp = Blueprint('views_bp', __name__, template_folder='templates')
@@ -103,7 +102,7 @@ def signup():
             newuser = User(
                 username=username,
                 email=email,
-                password=bcrypt.generate_password_hash(password),
+                password=bcrypt.generate_password_hash(password).decode('utf-8'),
             )
 
             db.session.add(newuser)
