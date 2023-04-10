@@ -60,10 +60,10 @@ def create_app(app_id, app_key):
     from .views import views_bp as views_bp
     app.register_blueprint(views_bp)
 
-    """    with app.app_context():
+    with app.app_context():
         db.create_all()
 
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    """engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     Session = sessionmaker(bind=engine)"""
 
     return app
