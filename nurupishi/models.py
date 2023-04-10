@@ -14,7 +14,12 @@ from datetime import datetime
 import os
 
 
-from nurupishi import db
+from nurupishi import db, login_manager
+
+@login_manager.user_loader
+def load_user(user_id):
+    """returns a User object from user_id"""
+    return User.query.get(int(user_id))
 
 class User(UserMixin, db.Model):
     """
@@ -22,21 +27,16 @@ class User(UserMixin, db.Model):
     account was created
     """
     __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False, unique=True)
-    creation_date = db.Column(db.Date, nullable=False)
+    creation_date = db.Column(db.Date, default=datetime.utcnow)
 
     favorite_recipes = db.relationship('Favorites', backref='user', lazy='dynamic')
     bookmarks = db.relationship('Bookmarks', backref='user', lazy='dynamic')
     search_history = db.relationship('SearchHistory', backref='user', lazy='dynamic')
 
-    def __init__(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = bcrypt.generate_password_hash(password)
-        self.creation_date = datetime.now()
     
     def __repr__(self):
         return f"<username {self.username}>"
@@ -49,7 +49,7 @@ class Favorites(UserMixin, db.Model):
     favorites_id = db.Column(db.Integer, primary_key=True)
     recipe_type = db.Column(db.String(255), nullable=False)
     recipe_id = db.Column(db.Integer, ForeignKey('recipes.recipes_id'), nullable=False)
-    users_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    users_id = db.Column(db.Integer, ForeignKey('users.user_id'), nullable=False)
 
 class Bookmarks(UserMixin, db.Model):
     """
@@ -57,7 +57,7 @@ class Bookmarks(UserMixin, db.Model):
     """
     __tablename__ = 'bookmarks'
     bookmarks_id = db.Column(db.Integer, primary_key=True)
-    users_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    users_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255))
@@ -66,7 +66,7 @@ class SearchHistory(UserMixin, db.Model):
     """saves users search history"""
     __tablename__ = 'search_history'
     history_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey('users.user_id'), nullable=False)
     query = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
 

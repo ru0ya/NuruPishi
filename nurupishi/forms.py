@@ -14,7 +14,7 @@ from wtforms.validators import (
 )
 from email_validator import validate_email, EmailNotValidError
 
-from .models import User
+from nurupishi.models import User
 
 class register_form(FlaskForm):
     username = StringField(

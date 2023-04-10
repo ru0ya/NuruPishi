@@ -11,40 +11,23 @@ from flask_login import(
     login_user,
     logout_user
 )
-#from sqlalchemy import create_engine
-#from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
-#from flask_session import Session
-#from flask_bcrypt import Bcrypt
-#from models import User
-#from dotenv import load_dotenv
-#from datetime import timedelta
-#from app_plugins import db, login_manager
-#from app_plugins import init_app, db, login_manager
-from .forms import register_form, login_form
-#from nurupishi import create_app
-#from models import Session
 from dotenv import load_dotenv
+from datetime import datetime
 import requests
 import os
 
-#app = create_app()
-#db.init_app(app)
 
-from nurupishi.app_plugins import login_manager
+
+from nurupishi.forms import register_form, login_form
+from nurupishi.app_plugins import bcrypt
+from nurupishi import db
 
 load_dotenv('cook.env')
 
-views_bp = Blueprint('views_bp', __name__, template_folder='templates')
-
-#app_id = os.getenv("APP_ID")
-#app_key = os.getenv("APP_KEY")
+views_bp = Blueprint('views_bp', __name__, template_folder='templates', static_folder='static')
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    """returns a User object from user_id"""
-    return User.query.get(int(user_id))
 
 
 @views_bp.route("/")
@@ -60,22 +43,11 @@ def search():
     app_id = current_app.config['APP_ID']
     app_key = current_app.config['APP_KEY']
     url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
-    #    url = f'https://api.spoonacular.com/recipes/findByIngredients'
-    #    params = {
-    #       'apiKey': app_key,
-    #      'ingredients': query,
-    #     'number': 9
-    #    }
     
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()['hits']
-    #data = response.json()
     recipes = []
-    #   for item in data["results"]:
-        #recipe = item['recipe']
-        #    recipes.append(recipe)
-        #    print(data)
 
     for item in data:
         recipe = item['recipe']
@@ -85,7 +57,7 @@ def search():
 
 @views_bp.route("/signup", methods=["GET", "POST"])
 def signup():
-    from .models import User
+    from nurupishi.models import User
     """
     allows a new user to create an account
     using email, username and a password
@@ -98,17 +70,19 @@ def signup():
             email = form.email.data
             password = form.password.data
             username = form.username.data
+            creation_date = datetime.utcnow()
 
             newuser = User(
                 username=username,
                 email=email,
                 password=bcrypt.generate_password_hash(password).decode('utf-8'),
+                creation_date=creation_date
             )
 
             db.session.add(newuser)
             db.session.commit()
             flash(f"Account Succesfully created", "success")
-            return redirect(url_for("login"))
+            return redirect(url_for("views_bp.login"))
         except Exception as e:
             flash(e, "danger")
      
@@ -116,16 +90,16 @@ def signup():
 
 @views_bp.route("/login", methods=["GET", "POST"])
 def login():
-    from .models import User
+    from nurupishi.models import User
     form = login_form()
 
     if form.validate_on_submit():
         try:
             user = User.query.filter_by(email=form.email.data).first()
 
-            if check_password_hash(user.password, form.password.data):
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('index'))
+                return redirect(url_for('views_bp.index'))
             else:
                 flash("Invalid Username or password!", "danger")
         except Exception as e:
@@ -137,7 +111,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('views_bp.login'))
 
 @views_bp.route("/myprofile")
 @login_required
