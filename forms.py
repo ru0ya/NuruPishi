@@ -12,6 +12,7 @@ from wtforms.validators import (
     EqualTo,
     Optional
 )
+from email_validator import validate_email, EmailNotValidError
 
 from models import User
 
