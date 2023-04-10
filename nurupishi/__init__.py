@@ -11,8 +11,8 @@ from flask_migrate import Migrate
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-#from models import db
-#from app_plugins import bcrypt, login_manager, migrate
+
+from nurupishi.app_plugins import bcrypt, login_manager, migrate, db
 
 load_dotenv('cook.env')
 
@@ -31,12 +31,9 @@ load_dotenv('cook.env')
 
 
 def create_app(app_id, app_key):
-    from models import db
-    from app_plugins import bcrypt, login_manager, migrate
-
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config['SECRET_KEY'] = os.getenv('MY_SECRET_KEY')
-#    app.secret_key = os.getenv('MY_SECRET_KEY')
+    #app.secret_key = os.getenv('MY_SECRET_KEY')
     app.config['APP_ID'] = os.getenv('APP_ID')
     app.config['APP_KEY'] = os.getenv('APP_KEY')
  #   app_id = os.getenv('APP_ID')
@@ -60,7 +57,7 @@ def create_app(app_id, app_key):
     login_manager.init_app(app)
     migrate.init_app(app, db)
 
-    from views import views_bp as views_bp
+    from .views import views_bp as views_bp
     app.register_blueprint(views_bp)
 
     """    with app.app_context():
@@ -71,6 +68,6 @@ def create_app(app_id, app_key):
 
     return app
 
-if __name__ == "__main__":
-    app = create_app(app_id="APP_ID", app_key="APP_KEY")
-    app.run(debug=True)
+#if __name__ == "__main__":
+ #   app = create_app(app_id="APP_ID", app_key="APP_KEY")
+  #  app.run(debug=True)

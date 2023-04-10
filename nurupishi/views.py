@@ -21,7 +21,7 @@ from sqlalchemy.exc import IntegrityError
 #from datetime import timedelta
 #from app_plugins import db, login_manager
 #from app_plugins import init_app, db, login_manager
-from forms import register_form, login_form
+from .forms import register_form, login_form
 #from nurupishi import create_app
 #from models import Session
 from dotenv import load_dotenv
@@ -31,7 +31,7 @@ import os
 #app = create_app()
 #db.init_app(app)
 
-from app_plugins import login_manager
+from nurupishi.app_plugins import login_manager
 
 load_dotenv('cook.env')
 
@@ -85,7 +85,7 @@ def search():
 
 @views_bp.route("/signup", methods=["GET", "POST"])
 def signup():
-    from models import User
+    from .models import User
     """
     allows a new user to create an account
     using email, username and a password
@@ -116,7 +116,7 @@ def signup():
 
 @views_bp.route("/login", methods=["GET", "POST"])
 def login():
-    from models import User
+    from .models import User
     form = login_form()
 
     if form.validate_on_submit():
