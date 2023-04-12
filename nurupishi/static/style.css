@@ -1,12 +1,18 @@
 body{
 
 	padding: 0;
-	width: 100%;
+	width: 100vw;
 	margin: 0;
 	font-family: 'Open Sans' sans-serif;
 	background-size: cover;
-	height: calc(100vh - 80px);
+	height: 100vh;
 }
+
+/*div {
+	width: 100vw;
+	height: 100vh;
+}*/
+
 .search-container {
   display: flex;
   justify-content: center;
@@ -155,3 +161,21 @@ button[type="submit"]:hover {
 	flex-grow: 1;
 }
 
+.btn {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	padding: 10px;
+	margin-left: 10px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.btn :hover {
+     	background-color: #3e8e41;
+}
+
+.footer {
+	align-items: center;
+}

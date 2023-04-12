@@ -18,7 +18,7 @@
 
 	{% if request.path == '/signup' %}
 
-	{{ form.username(class_="form-control", placeholder="Username")}}
+	{{ form.username(class_="form-control", placeholder="Username")}}<br>
 
 	{% for error in form.username.errors %}
 	{{ error }}
@@ -48,10 +48,6 @@
 	{% endif %}
 
 	{{ form.submit(class="btn btn-outline-info") }}
-
-	<button type="submit" class="btn btn-block btn-primary mb-3">
-		{{ btn_action }}
-	</button>
 
 	<p>
 	{% if request.path != '/signup' %}
