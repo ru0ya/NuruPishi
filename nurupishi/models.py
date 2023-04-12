@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from flask_session import Session
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from itsdangerous import URLSafeTimedSerializer as Serializer
 from dotenv import load_dotenv
 from datetime import datetime
 import os
@@ -36,6 +37,19 @@ class User(UserMixin, db.Model):
     favorite_recipes = db.relationship('Favorites', backref='user', lazy='dynamic')
     bookmarks = db.relationship('Bookmarks', backref='user', lazy='dynamic')
     search_history = db.relationship('SearchHistory', backref='user', lazy='dynamic')
+
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).deccode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return NOne
+        return User.query.get(user_id)
 
     
     def __repr__(self):

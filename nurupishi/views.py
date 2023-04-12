@@ -19,7 +19,8 @@ import os
 
 
 
-from nurupishi.forms import register_form, login_form
+from nurupishi.forms import (RegistrationForm, LoginForm,
+                             RequestResetForm, ResetPasswordForm)
 from nurupishi.app_plugins import bcrypt
 from nurupishi import db
 
@@ -63,7 +64,7 @@ def signup():
     using email, username and a password
     """
 
-    form = register_form()
+    form = RegistrationForm()
 
     if form.validate_on_submit():
         try:
@@ -91,7 +92,7 @@ def signup():
 @views_bp.route("/login", methods=["GET", "POST"])
 def login():
     from nurupishi.models import User
-    form = login_form()
+    form = LoginForm()
 
     if form.validate_on_submit():
         try:
@@ -139,3 +140,44 @@ def favorites():
         favorites = session.query(Favorites).filter_by(users_id=user.user_id).all()
         #    session.close()
         return render_templates('favorites.html', favorites=favorites)
+
+def send_reset_email(user):
+    pass
+
+@views_bp.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    """
+    function that allows user to request for
+    password reset
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('views_bp.index'))
+
+    form = RequestResetForm()
+    if  form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('views_bp.login'))
+    return render_template('reset_request.html', form=form)
+
+@views_bp.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    """
+    using the token user recieved, password can
+    be successfully reset
+    else: invalir token or token expired
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('views_bp.index'))
+
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('views_bp.reset_request'))
+
+    form = ResetPasswordForm()
+    return render_template('reset_token.html', form=form)
+
+
+

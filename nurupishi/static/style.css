@@ -145,3 +145,13 @@ button[type="submit"]:hover {
 
 }
 
+.form-control {
+	display: flex;
+	padding: 5px;
+	border: none;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	font-size: 16px;
+	flex-grow: 1;
+}
+
