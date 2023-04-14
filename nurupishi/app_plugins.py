@@ -12,4 +12,7 @@ login_manager = LoginManager()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 migrate = Migrate()
+<<<<<<< HEAD
 mail = Mail()
+=======
+>>>>>>> 5beebb32bfe06148a54ac872b9f78ea2c7857285

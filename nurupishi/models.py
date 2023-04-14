@@ -31,16 +31,19 @@ class User(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(db.Date, default=datetime.utcnow)
 
     favorite_recipes = db.relationship('Favorites', backref='user', lazy='dynamic')
     bookmarks = db.relationship('Bookmarks', backref='user', lazy='dynamic')
     search_history = db.relationship('SearchHistory', backref='user', lazy='dynamic')
 
+    def get_id(self):
+        return str(self.user_id)
+
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
-        return s.dumps({'user_id': self.id}).deccode('utf-8')
+        return s.dumps({'user_id': self.user_id}).decode('utf-8')
 
     @staticmethod
     def verify_reset_token(token):
