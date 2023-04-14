@@ -11,6 +11,7 @@ from flask_login import(
     login_user,
     logout_user
 )
+#from flask_mail import Message
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 from datetime import datetime
@@ -22,7 +23,7 @@ import os
 from nurupishi.forms import (RegistrationForm, LoginForm,
                              RequestResetForm, ResetPasswordForm)
 from nurupishi.app_plugins import bcrypt
-from nurupishi import db
+from nurupishi import db, mail
 
 load_dotenv('cook.env')
 
@@ -128,7 +129,6 @@ def bookmarks():
     with Session() as session:
         user = session.query(User).filter_by(username=session('username')).first()
         bookmarks = session.query(Bookmarks).filter_by(users_id=user.user_id).all()
-        #session.close()
 
         return render_template('bookmark.html', bookmarks=bookmarks)
 
@@ -138,11 +138,20 @@ def favorites():
     with Session() as session:
         user = session.query(User).filter_by(username=session('username')).first()
         favorites = session.query(Favorites).filter_by(users_id=user.user_id).all()
-        #    session.close()
+
         return render_templates('favorites.html', favorites=favorites)
 
 def send_reset_email(user):
-    pass
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request',
+                  sender='noreply@demo.com',
+                  recipients=[user.email])
+    msg.body = f'''To reset your password, visit the following link:
+        {url_for('views_bp.reset_token', token=token, external=True)}
+
+        If you did not make this request then simply ignore this email and
+        no changes will be made
+        '''
 
 @views_bp.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
@@ -177,6 +186,12 @@ def reset_token(token):
         return redirect(url_for('views_bp.reset_request'))
 
     form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8'),
+        user.password = hashed_password
+        db.session.commit()   
+        flash('Your password has been updated succesfully!', 'success')
+        return redirect(url_for('views_bp.login'))
     return render_template('reset_token.html', form=form)
 
 

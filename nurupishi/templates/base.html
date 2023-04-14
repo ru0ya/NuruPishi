@@ -8,21 +8,24 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	</head>
 	<body>
-		<nav class="navbar">
-			<div class="logo">NP</div>
-			<ul class="nav-links">
-				<div class="menu">
-					<li><a href="{{ url_for('views_bp.index') }}">Search</a></li>
-					<li><a href="{{ url_for('views_bp.search') }}">Home</a></li>
-					<li><a href="{{ url_for('views_bp.signup') }}">SignUp</a></li>
-					<li><a href="{{ url_for('views_bp.login') }}">LogIn</a></li>
-					{% if current_user.is_authenticated %}
-					<li><a href="{{ url_for('views_bp.favorites') }}">Favorite</a></li>
-					<li><a href="{{ url_for('views_bp.bookmarks') }}">Bookmark</a></li>
-					{% endif %}
-				</div>
-			</ul>
-		</nav>
+		<header class="header">
+			<nav>
+				<div class="logo">NP</div>
+				<ul class="nav-links">
+					<div class="menu">
+						<li><a href="{{ url_for('views_bp.index') }}">Search</a></li>
+						<li><a href="{{ url_for('views_bp.search') }}">Home</a></li>
+						<li><a href="{{ url_for('views_bp.signup') }}">SignUp</a></li>
+						<li><a href="{{ url_for('views_bp.login') }}">LogIn</a></li>
+			
+						{% if current_user.is_authenticated %}
+						<li><a href="{{ url_for('views_bp.favorites') }}">Favorite</a></li>
+						<li><a href="{{ url_for('views_bp.bookmarks') }}">Bookmark</a></li>
+						{% endif %}
+					</div>
+				</ul>
+			</nav>
+		</header>
 		<main>
 			{% block content %}
 			<div class="search-container">

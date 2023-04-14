@@ -39,21 +39,22 @@
 	{% endfor %}
 
 	{% if request.path == '/signup' %}
-	{{ form.cpassword(class_="form-control", placeholder="Confirm Password")}}<br>
+	{{ form.confirm_password(class_="form-control", placeholder="Confirm Password")}}<br>
 
-	{% for error in form.cpassword.errors %}<br>
+	{% for error in form.confirm_password.errors %}<br>
 	{{ error }}
 	{% endfor %}
 	
 	{% endif %}
 
 	{{ form.submit(class="btn btn-outline-info") }}
-
 	<p>
-	{% if request.path != '/signup' %}
-	New here?
-	<a href="{{url_for('views_bp.signup')}}">Signup</a>
-	{% endif %}
+		{% if request.path != '/signup' %}
+		New here?
+		<a href="{{ url_for('views_bp.signup') }}">Signup</a>
+		Forgot Password?
+		<a href="{{ url_for('views_bp.reset_request') }}">Reset Password</a>
+		{% endif %}
 	</p>
 </div>
 {% endblock %}

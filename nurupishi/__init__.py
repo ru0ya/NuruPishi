@@ -17,27 +17,11 @@ from nurupishi.app_plugins import bcrypt, login_manager, migrate, db
 load_dotenv('cook.env')
 
 
-#bcrypt = Bcrypt()
-#login_manager = LoginManager()
-#migrate = Migrate()
-
-#app_id = os.getenv("APP_ID")
-#app_key = os.getenv("APP_KEY")
-
-
-#login_manager.session_protection = "strong"
-#login_manager.login_view = "login"
-#login_manager.login_message_category = "info"
-
-
 def create_app(app_id, app_key):
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config['SECRET_KEY'] = os.getenv('MY_SECRET_KEY')
-    #app.secret_key = os.getenv('MY_SECRET_KEY')
     app.config['APP_ID'] = os.getenv('APP_ID')
     app.config['APP_KEY'] = os.getenv('APP_KEY')
- #   app_id = os.getenv('APP_ID')
-#    app_key = os.getenv('APP_KEY')
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
@@ -51,8 +35,13 @@ def create_app(app_id, app_key):
     login_manager.login_view = "login"
     login_manager.login_message_category = "info"
 
+    app.config['MAIL_SERVER'] = 'smtp.googlemail.com' 
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
+    app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 
-
+    mail.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db)
@@ -67,7 +56,3 @@ def create_app(app_id, app_key):
     Session = sessionmaker(bind=engine)"""
 
     return app
-
-#if __name__ == "__main__":
- #   app = create_app(app_id="APP_ID", app_key="APP_KEY")
-  #  app.run(debug=True)
