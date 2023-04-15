@@ -23,7 +23,7 @@ import os
 from nurupishi.forms import (RegistrationForm, LoginForm,
                              RequestResetForm, ResetPasswordForm)
 from nurupishi.app_plugins import bcrypt
-from nurupishi import db, mail
+from nurupishi import db
 
 load_dotenv('cook.env')
 
@@ -142,16 +142,17 @@ def favorites():
         return render_templates('favorites.html', favorites=favorites)
 
 def send_reset_email(user):
-    token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender='noreply@demo.com',
-                  recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link:
-        {url_for('views_bp.reset_token', token=token, external=True)}
+    pass
+#    token = user.get_reset_token()
+ #   msg = Message('Password Reset Request',
+  #                sender='noreply@demo.com',
+   #               recipients=[user.email])
+   # msg.body = f'''To reset your password, visit the following link:
+    #    {url_for('views_bp.reset_token', token=token, external=True)}
 
-        If you did not make this request then simply ignore this email and
-        no changes will be made
-        '''
+       # If you did not make this request then simply ignore this email and
+      #  no changes will be made
+     #   '''
 
 @views_bp.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():

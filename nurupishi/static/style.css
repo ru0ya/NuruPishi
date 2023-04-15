@@ -1,10 +1,20 @@
-body{
-	padding: 0;
-	width: 100vw;
+* {
 	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body{
+	width: 100vw;
 	font-family: 'Open Sans' sans-serif;
 	background-size: cover;
-	height: 100vh;
+	/*height: 100vh;*/
+
+	a {
+		text-decoration: none;
+	}
+	li {
+		list-style: none;
+	}
 }
 
 /*div {
@@ -14,6 +24,7 @@ body{
 
 .search-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   background-image: url('cook.jpg');
@@ -77,13 +88,14 @@ button[type="submit"]:hover {
 	justify-content: space-around;
 	padding: 20px;
 	background-color: #3e8e41;
-/*	color: #3e8e41;*/
+	color: #3e8e41;
 	flex-wrap: wrap;
 	width: 100%;
 	height: 100px;
 }
 
 .logo {
+	margin-right: auto;
 	font-size: 32px;
 }
 
@@ -143,7 +155,6 @@ button[type="submit"]:hover {
 	margin: 0 auto;
 	border: none;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
 }
 
 .form-control {
@@ -176,4 +187,21 @@ button[type="submit"]:hover {
 	background-color: #3e8e41;
 	flex-shrink: 0;
 	height: 100px;
+}
+
+@media screen and (max-width: 768px){
+	.header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.nav-links {
+		flex-direction: column;
+		margin-top: 20px;
+	}
+
+	.nav-links li {
+		margin-left: 0;
+		margin-bottom: 10px;
+	}
 }
