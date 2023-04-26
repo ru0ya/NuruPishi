@@ -1,20 +1,14 @@
 NuruPishi
 
 This is a recipe app that fetches recipes according to user needs, saves favorites and bookmarks for users ease of access in future.
-## API Reference
 
-#### Get all items
-
-```http
-  GET /api/items
-```
 
 
 
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone 
 ```
 
 Go to the project directory
