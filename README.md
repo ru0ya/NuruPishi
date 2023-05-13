@@ -7,36 +7,25 @@ This is a recipe app that fetches recipes according to user needs, saves favorit
 
 Clone the project
 
-```bash
-  git clone 
-```
+git clone git@github.com:ru0ya/NuruPishi.git
 
 Go to the project directory
 
-```bash
-  cd my-project
-```
+cd NuruPishi
 
 Install dependencies
 
-```bash
-  npm install
-```
+pip install -r requirements.txt
 
 Start the server
 
-```bash
-  npm run start
-```
+gunicorn run:app
+
 ## Deployment
 
 To deploy this project run
 
-```bash
-  npm run deploy
-```
 
-```
 ## Authors
 
 - [@ru0ya](https://github.com/ru0ya)
