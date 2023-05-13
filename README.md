@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # NuruPishi
 
 This is a recipe app that fetches recipes according to user needs, 
