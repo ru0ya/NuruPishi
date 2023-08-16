@@ -1,18 +1,18 @@
 #!/usr/bin/python3
 """main app"""
-
 import os
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from flask import Flask
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-from flask_migrate import Migrate
+# from flask_bcrypt import Bcrypt
+# from flask_login import LoginManager
+# from flask_migrate import Migrate
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 from nurupishi.app_plugins import bcrypt, login_manager, migrate, db
+
 
 load_dotenv('cook.env')
 

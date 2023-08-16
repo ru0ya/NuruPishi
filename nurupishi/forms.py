@@ -13,31 +13,37 @@ from wtforms.validators import (
     Optional
 )
 from email_validator import validate_email, EmailNotValidError
+from pydantic import ValidationError
 
-from nurupishi.models import User
+from nurupishi.models import User, Bookmarks, Favorites
+
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username',
-        validators=[
-            InputRequired(),
-            Length(3, 20, message="Please provide a valid name"),
-            Regexp(
-                "^[A-Za-z][A-Za-z0-9_.]*$",
-                0,
-                "Usernames must have only letters, " "numbers, dots or underscores",
-            ),
-        ]
-    )
-    email = StringField('Email', 
-                        validators=[InputRequired(), Email(), Length(1, 64)])
+    username = StringField(
+            'Username',
+            validators=[
+                InputRequired(),
+                Length(3, 20, message="Please provide a valid name"),
+                Regexp(
+                    "^[A-Za-z][A-Za-z0-9_.]*$",
+                    0,
+                    "Usernames must have only letters, " "numbers, dots or underscores",
+                    ),
+                ]
+            )
+    email = StringField(
+            'Email', 
+            validators=[InputRequired(), Email(), Length(1, 64)]
+            )
     password = PasswordField(validators=[InputRequired(), Length(8, 72)])
-    confirm_password = PasswordField('Confirm Password',
-        validators=[
-            InputRequired(),
-            Length(8, 72),
-            EqualTo("password", message="Passwords must match!"),
-        ]
-    )
+    confirm_password = PasswordField(
+            'Confirm Password',
+            validators=[
+                InputRequired(),
+                Length(8, 72),
+                EqualTo("password", message="Passwords must match!"),
+                ]
+            )
     submit = SubmitField('Sign Up')
 
     def validate_email(self, email):
@@ -54,19 +60,28 @@ class RegistrationForm(FlaskForm):
         if User.query.filter_by(username=username.data).first():
             raise ValidationError("Username already taken")
 
+
 class LoginForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[InputRequired(), Email(), Length(1, 64)])
-    password = PasswordField('Password',
-        validators=[InputRequired(), Length(min=8, max=72)])
-    username = StringField('Username',
-        validators=[Optional()]
-    )
+    email = StringField(
+            'Email',
+            validators=[InputRequired(), Email(), Length(1, 64)]
+            )
+    password = PasswordField(
+            'Password',
+            validators=[InputRequired(), Length(min=8, max=72)]
+            )
+    username = StringField(
+            'Username',
+            validators=[Optional()]
+            )
     submit = SubmitField('Login')
 
+
 class RequestResetForm(FlaskForm):
-     email = StringField('Email' ,
-                         validators=[InputRequired(), Email(), Length(1, 64)])
+     email = StringField(
+             'Email',
+             validators=[InputRequired(), Email(), Length(1, 64)]
+             )
      submit = SubmitField('Request Password Reset')
 
      def validate_email(self, email):
@@ -76,20 +91,22 @@ class RequestResetForm(FlaskForm):
          """
          user = User.query.filter_by(email=email.data).first()
          password = PasswordField(validators=[InputRequired(), Length(8, 72)])
-         cpassword = PasswordField('Confirm Password',
-                                   validators=[
-                                       InputRequired(),
-                                       Length(8, 72),
-                                       EqualTo("password", message="Passwords must match!"),
-                                   ]
-                                  )
+         cpassword = PasswordField(
+                 'Confirm Password',
+                 validators=[
+                     InputRequired(),
+                     Length(8, 72),
+                     EqualTo("password", message="Passwords must match!"),
+                     ]
+                 )
          if user is None:
              raise ValidationError("There is no account with that email. You must register first")
 
+
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired()])
-    cpassword = PasswordField('Confirm Password',
-                              validators=[DataRequired(), EqualTo('password')])
+    cpassword = PasswordField(
+            'Confirm Password',
+            validators=[DataRequired(), EqualTo('password')]
+            )
     submit = SubmitField('Reset Password')
-
-

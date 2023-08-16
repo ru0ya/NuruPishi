@@ -13,6 +13,7 @@ from flask_login import(
 )
 #from flask_mail import Message
 from sqlalchemy.exc import IntegrityError
+from slqalchemy.orm import Session
 from dotenv import load_dotenv
 from datetime import datetime
 import requests
@@ -20,21 +21,26 @@ import os
 
 
 
-from nurupishi.forms import (RegistrationForm, LoginForm,
-                             RequestResetForm, ResetPasswordForm)
+from nurupishi.forms import (
+        RegistrationForm,
+        LoginForm,
+        RequestResetForm,
+        ResetPasswordForm
+        )
 from nurupishi.app_plugins import bcrypt
 from nurupishi import db
+from nurupishi.models import Bookmarks, User, Favorites
+
 
 load_dotenv('cook.env')
 
 views_bp = Blueprint('views_bp', __name__, template_folder='templates', static_folder='static')
 
 
-
-
 @views_bp.route("/")
 def index():
     return render_template("base.html")
+
 
 @views_bp.route("/search", methods=["GET"])
 def search():
@@ -56,6 +62,7 @@ def search():
         recipes.append(recipe)
 
     return render_template('search.html', recipes=recipes)
+
 
 @views_bp.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -90,8 +97,12 @@ def signup():
      
     return render_template('auth.html', form=form)
 
+
 @views_bp.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    Validates user for log in
+    """
     from nurupishi.models import User
     form = LoginForm()
 
@@ -109,11 +120,16 @@ def login():
 
     return render_template('auth.html', form=form)
 
+
 @views_bp.route("/logout")
 @login_required
 def logout():
+    """
+    Allows logged in user to logout
+    """
     logout_user()
     return redirect(url_for('views_bp.login'))
+
 
 @views_bp.route("/myprofile")
 @login_required
@@ -122,6 +138,7 @@ def userprofile():
     bookmarks = current_user.bookmarks.all()
 
     return render_template("myprofile.html", favorites=favorites, bookmarks=bookmarks)
+
 
 @views_bp.route("/bookmark", methods=["GET"])
 def bookmarks():
@@ -132,6 +149,7 @@ def bookmarks():
 
         return render_template('bookmark.html', bookmarks=bookmarks)
 
+
 @views_bp.route("/favorites", methods=["GET"])
 def favorites():
     from models import User
@@ -139,7 +157,8 @@ def favorites():
         user = session.query(User).filter_by(username=session('username')).first()
         favorites = session.query(Favorites).filter_by(users_id=user.user_id).all()
 
-        return render_templates('favorites.html', favorites=favorites)
+        return render_template('favorites.html', favorites=favorites)
+
 
 def send_reset_email(user):
     pass
@@ -153,6 +172,7 @@ def send_reset_email(user):
        # If you did not make this request then simply ignore this email and
       #  no changes will be made
      #   '''
+
 
 @views_bp.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
@@ -170,6 +190,7 @@ def reset_request():
         flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('views_bp.login'))
     return render_template('reset_request.html', form=form)
+
 
 @views_bp.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
