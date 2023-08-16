@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # NuruPishi
 
 This is a recipe app that fetches recipes according to user needs, 
@@ -21,29 +20,29 @@ The app uses Flask libraries for authentication and backend functionality, while
 ## Installation
 
 1. Clone the repository
-git clone git@github.com:ru0ya/NuruPishi.git
+`git clone git@github.com:ru0ya/NuruPishi.git`
 
 2. Navigate to project directory
-cd NuruPishi
+`cd NuruPishi`
 
 3. Create a virtual environment
-python -m venv venv
+`python -m venv venv`
 
 4. Activate virtual environment
 	-On macOS and Linux:
-	source venv/bin/activate
+	`source venv/bin/activate`
 	- On Windows:
-	.\venv\Scripts\activate
+	`.\venv\Scripts\activate`
 5. Install required dependencies
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 6. Set up the database:
 	-Create a PostgreSQL database for the app.
 	-Update the database configuration in the config.py file with your PostgreSQL credentials.
 7. Run the database migrations:
-	flask db upgrade
+	`flask db upgrade`
 8. Start the development server:
-	flask run
+	`flask run`
 9. Access the app in your web browser at http://localhost:5000
 
 
@@ -51,25 +50,24 @@ pip install -r requirements.txt
 
 Once the app is up and running, you can use the following steps to search for and save recipes:
 
-    Create an account or log in if you already have one.
+   Create an account or log in if you already have one.
 
-    Enter the ingredients you have in the search bar and click "Search Recipes".
+   Enter the ingredients you have in the search bar and click "Search Recipes".
 
-    Browse through the list of recipes that match your ingredients.
+   Browse through the list of recipes that match your ingredients.
 
-    Click on a recipe to view more details, including ingredients, instructions, and nutritional information.
+   Click on a recipe to view more details, including ingredients, instructions, and nutritional information.
 
-    Like or bookmark recipes that you enjoy to save them for future reference.
-
+   Like or bookmark recipes that you enjoy to save them for future reference
 ## Contributing
 
 We welcome contributions to improve and enhance the recipe app. If you would like to contribute, please follow these guidelines:
 
-    Fork the repository and create a new branch for your contribution.
+   Fork the repository and create a new branch for your contribution.
 
-    Make your changes and ensure that the app is functioning correctly.
+   Make your changes and ensure that the app is functioning correctly.
 
-    Submit a pull request with a clear description of your changes and the problem they solve.
+   Submit a pull request with a clear description of your changes and the problem they solve.
 
 We appreciate your contributions and efforts to make the recipe app better for everyone.
 
