@@ -59,6 +59,7 @@ Once the app is up and running, you can use the following steps to search for an
    Click on a recipe to view more details, including ingredients, instructions, and nutritional information.
 
    Like or bookmark recipes that you enjoy to save them for future reference
+
 ## Contributing
 
 We welcome contributions to improve and enhance the recipe app. If you would like to contribute, please follow these guidelines:
@@ -71,6 +72,9 @@ We welcome contributions to improve and enhance the recipe app. If you would lik
 
 We appreciate your contributions and efforts to make the recipe app better for everyone.
 
+## Article
+[Lessons learnt, failures and
+wins](https://www.linkedin.com/pulse/road-nurupishi-web-app-challenges-triumps-lessons-learned-mwangi/?trackingId=gwVdpIiYTeGuoSe5ukYfZw%3D%3D)
 
 ## License
 
