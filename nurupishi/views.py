@@ -1,24 +1,31 @@
 #!/usr/bin/python3
 """routes and templates"""
 
-from flask import Flask, flash, render_template, request, url_for, redirect, Blueprint, current_app
+from flask import (
+        Flask,
+        flash,
+        render_template,
+        request, url_for,
+        redirect,
+        Blueprint,
+        current_app
+        )
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import(
+from flask_login import (
     LoginManager,
     current_user,
     login_required,
     UserMixin,
     login_user,
     logout_user
-)
-#from flask_mail import Message
+    )
+# from flask_mail import Message
 from sqlalchemy.exc import IntegrityError
 from slqalchemy.orm import Session
 from dotenv import load_dotenv
 from datetime import datetime
 import requests
 import os
-
 
 
 from nurupishi.forms import (
@@ -34,7 +41,12 @@ from nurupishi.models import Bookmarks, User, Favorites
 
 load_dotenv('cook.env')
 
-views_bp = Blueprint('views_bp', __name__, template_folder='templates', static_folder='static')
+views_bp = Blueprint(
+        'views_bp',
+        __name__,
+        template_folder='templates',
+        static_folder='static'
+        )
 
 
 @views_bp.route("/")
@@ -51,7 +63,6 @@ def search():
     app_id = current_app.config['APP_ID']
     app_key = current_app.config['APP_KEY']
     url = f'https://api.edamam.com/search?q={query}&app_id={app_id}&app_key={app_key}'
-    
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()['hits']
@@ -184,7 +195,7 @@ def reset_request():
         return redirect(url_for('views_bp.index'))
 
     form = RequestResetForm()
-    if  form.validate_on_submit():
+    if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
         flash('An email has been sent with instructions to reset your password.', 'info')
@@ -215,6 +226,3 @@ def reset_token(token):
         flash('Your password has been updated succesfully!', 'success')
         return redirect(url_for('views_bp.login'))
     return render_template('reset_token.html', form=form)
-
-
-

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """user validation forms"""
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import (
@@ -11,7 +10,7 @@ from wtforms.validators import (
     Regexp,
     EqualTo,
     Optional
-)
+    )
 from email_validator import validate_email, EmailNotValidError
 from pydantic import ValidationError
 
@@ -78,29 +77,29 @@ class LoginForm(FlaskForm):
 
 
 class RequestResetForm(FlaskForm):
-     email = StringField(
-             'Email',
-             validators=[InputRequired(), Email(), Length(1, 64)]
-             )
-     submit = SubmitField('Request Password Reset')
+    email = StringField(
+            'Email',
+            validators=[InputRequired(), Email(), Length(1, 64)]
+            )
+    submit = SubmitField('Request Password Reset')
 
-     def validate_email(self, email):
-         """
-         validates users email to allow for account details changing
-         if account does not exist, user has to register
-         """
-         user = User.query.filter_by(email=email.data).first()
-         password = PasswordField(validators=[InputRequired(), Length(8, 72)])
-         cpassword = PasswordField(
-                 'Confirm Password',
-                 validators=[
-                     InputRequired(),
-                     Length(8, 72),
-                     EqualTo("password", message="Passwords must match!"),
-                     ]
-                 )
-         if user is None:
-             raise ValidationError("There is no account with that email. You must register first")
+    def validate_email(self, email):
+        """
+        validates users email to allow for account details changing
+        if account does not exist, user has to register
+        """
+        user = User.query.filter_by(email=email.data).first()
+        password = PasswordField(validators=[InputRequired(), Length(8, 72)])
+        cpassword = PasswordField(
+                'Confirm Password',
+                validators=[
+                    InputRequired(),
+                    Length(8, 72),
+                    EqualTo("password", message="Passwords must match!"),
+                    ]
+                )
+        if user is None:
+            raise ValidationError("There is no account with that email. You must register first")
 
 
 class ResetPasswordForm(FlaskForm):
